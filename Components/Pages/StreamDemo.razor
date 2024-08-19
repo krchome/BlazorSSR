@@ -1,0 +1,39 @@
+﻿@page "/streaming-demo"
+@attribute [StreamRendering] 
+@using System.Threading.Tasks
+
+<h3>Streaming Demo</h3>
+
+@if (items == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <ul>
+        @foreach (var item in items)
+        {
+            <li>@item</li>
+        }
+    </ul>
+}
+
+@code {
+    private List<string> items;
+
+    protected override async Task OnInitializedAsync()
+    {
+        items = new List<string>();
+        await LoadItemsAsync();
+    }
+
+    private async Task LoadItemsAsync()
+    {
+        for (int i = 1; i <= 10; i++)
+        {
+            items.Add($"Item {i}");
+            StateHasChanged();
+            await Task.Delay(500); // Simulate delay for streaming effect
+        }
+    }
+}
